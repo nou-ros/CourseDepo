@@ -10,3 +10,7 @@ npm install --save axios
 
 # Listings
 We should use key in list values
+
+# Refs
+- to access DOM element directly
+- anytime a image successfully loads up it emits 'load' event which we can access with addEventListener
