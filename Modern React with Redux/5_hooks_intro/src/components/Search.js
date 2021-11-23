@@ -53,11 +53,31 @@ const Search = () => {
             setResults(data.query.search);
         };
 
-        if(term){
-            search();
+       
+        if (term && !results.length){
+             // fix the issue of 500ms wait at the very first render
+            search()
         }
-    }, [term]);
+        else{
+             //search only when there is a pause for 500 ms.
+            const timeoutId = setTimeout(() => {
+                // only search when there is some term
+                if(term){
+                    search();
+                }
+            }, 500)
 
+             // cleanup function
+            return () => {
+                // builtIn function of js to clear timing
+                clearTimeout(timeoutId);
+            }
+        }
+
+    },[term]);
+
+        
+        
     return(
         <div>
             <div className="ui form">

@@ -14,5 +14,11 @@ Also we can create custom hooks.
 - [data]: Run at initial render & run after every rerender if data has changed since last render. Can take multiple values in array.
 - empty: Run at initial render & run after every rerender.
 
+- Cleanup funtion of useEffect
+ In initial render useEffect will run the whole function and hold on to the cleanup function. Now when ever the useEffect will re-render it will invoke the previous cleanup function first then render the whole function and hold onto the next cleanup function again.
+
 # dangerouslySetInnerHTML 
 To remove html from strings incase of XSS attack
+
+# setTimeout 
+It returns a running time value 
