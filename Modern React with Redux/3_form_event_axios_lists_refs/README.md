@@ -6,7 +6,7 @@ onSubmit - User submits a form
 CallBack Handlers naming convention is on_elementName_change/click/submit and handle_elementName_change/click/submit
 
 # Axios
-npm install --save axios 
+npm install --save axios. Params will have all the necessary query strings(Key - Value pairs) for a url. Axios will take all the params and add it with url automatically.
 
 # Listings
 We should use key in list values

@@ -1,24 +1,65 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+
 
 const Search = () => {
-    const [term, setTerm] = useState('Coding');
+
+    const [term, setTerm] = useState('code');
     const [results, setResults] = useState([]);
+    const [debouncedTerm, setDebouncedTerm] = useState(term);
 
-    const inputOnChange = (e) => {
-        // console.log(e.target.value);
-        setTerm(e.target.value);
-    } 
+    //this will update debouncedTerm with the update of Term
+    useEffect(() => {
+        const timerId = setTimeout(() => {
+            setDebouncedTerm(term)
+        }, 1000);
+        
+        return () => {
+              clearTimeout(timerId);
+        };
 
-    // console.log(results);
+    }, [term])
+
+
+    useEffect(() => {
+         // console.log('render');
+        // async await for axios with useEffect
+        const search = async () => {
+            const { data } = await axios.get('https://en.wikipedia.org/w/api.php',{
+                params: {
+                    action:'query',
+                    list:'search',
+                    origin:'*',
+                    format:'json',
+                    srsearch: debouncedTerm
+                },
+            });
+
+            // console.log(data);
+            setResults(data.query.search);
+        };
+        
+        if(debouncedTerm)
+        {
+            search();
+        }
+    }, [debouncedTerm]);
+
+
+    useEffect(() => {
+       
+        
+    }, [term]);
+
+
     const renderedResults = results.map((result) => {
-        return( 
+        return(
             <div key={result.pageid} className="item">
                 <div className="right floated content">
                     <a 
                         className="ui button"
-                        href={`https://en.wikipedia.org?curid=${result.pageid}`}
-                        target="_blank"
+                        href={`https://en.wikipedia.org?curid=${result.pageid}`} 
+                        target="_blank" 
                         rel="noreferrer"
                     >
                         Go
@@ -28,74 +69,31 @@ const Search = () => {
                     <div className="header">
                         {result.title}
                     </div>
-                    {/* xss security */}
                     <span dangerouslySetInnerHTML={{ __html: result.snippet }}></span>
                 </div>
             </div>
         )
     })
 
-    useEffect(() => {
-        // console.log('effect');
-        // with each key press the search will happen in async manner
-        const search = async () => {
-           const { data } = await axios.get('https://en.wikipedia.org/w/api.php', {
-                params: {
-                    action: 'query',
-                    list: 'search',
-                    origin: '*',
-                    format: 'json',
-                    srsearch: term
-                }
-            });
-            
-            // console.log(data.query.search);
-            setResults(data.query.search);
-        };
 
-       
-        if (term && !results.length){
-             // fix the issue of 500ms wait at the very first render
-            search()
-        }
-        else{
-             //search only when there is a pause for 500 ms.
-            const timeoutId = setTimeout(() => {
-                // only search when there is some term
-                if(term){
-                    search();
-                }
-            }, 500)
-
-             // cleanup function
-            return () => {
-                // builtIn function of js to clear timing
-                clearTimeout(timeoutId);
-            }
-        }
-
-    },[term]);
-
-        
-        
     return(
         <div>
             <div className="ui form">
                 <div className="field">
-                    <label>Enter Search</label>
+                    <label>Search</label>
                     <input 
+                        value={term} 
+                        onChange={(e) => setTerm(e.target.value)}
                         className="input"
-                        value={term}
-                        onChange={inputOnChange}
                     />
                 </div>
-
-                <div className="ui celled list">
-                    {renderedResults}
-                </div>
             </div>
-        </div> 
+            <div className="ui celled list">
+                {renderedResults}
+            </div>
+        </div>
     )
-};
+}
+
 
 export default Search;
