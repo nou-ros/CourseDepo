@@ -30,3 +30,8 @@ clearTimeout(id_number);
 - Event bubbling/rising up in dom structure. Manual event in body with Vanilla in browser's console -> document.body.addEventListener('click', () => {console.log('clicked!')})
 
 - During event bubbling events created with addEventListener will be called first. After that react event listeners will be called (most child to parents.)
+
+
+# Routing - without React Router
+- windows.location.pathname has the route location in javaSript dom.
+- window.history.pushState will sync the content of a page with a url without refreshing the page.
