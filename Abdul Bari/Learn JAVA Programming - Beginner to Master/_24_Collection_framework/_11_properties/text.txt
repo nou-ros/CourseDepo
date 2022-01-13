@@ -1,0 +1,6 @@
+#Laptop
+#Wed Jan 12 11:40:58 BDT 2022
+Brand=Dell
+Processor=i7
+OS=Windows10
+Model=Latitude
